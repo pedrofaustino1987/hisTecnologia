@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASPECTOS EPISTEMOLOGICOS</title>
+<style>
+  :root {
+    --borde-verde-ancho: 2em; /* Define el ancho del borde como una variable */
+    --margin-top-rectangulo: 2cm; /* Define el margen superior del rectángulo */
+  }
+
+  body {
+    /* Forzamos el tamaño del body para simular la pantalla de 1280x720px */
+    width: 1280px;
+    height: 720px;
+    margin: 0 auto; /* Centra este body fijo si la ventana es más grande */
+    overflow: hidden; /* Evita barras de desplazamiento si las extensiones exceden */
+
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para apilar el rectángulo y el cuadrado inferior */
+    justify-content: flex-start; /* Alinea los elementos al inicio del eje principal */
+    align-items: center; /* Centra horizontalmente los elementos */
+
+    /* --- FONDO DE PANTALLA EPISTEMOLÓGICO --- */
+    background-image: url('ojo.png'); /* Ejemplo de imagen de mapa conceptual */
+    background-size: cover; /* La imagen cubre todo el fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center center; /* Centra la imagen de fondo */
+    background-attachment: fixed; /* Fija la imagen de fondo para que no se desplace con el contenido */
+    /* --- FIN FONDO DE PANTALLA --- */
+    position: relative; /* Necesario para posicionar el cuadrado inferior absolutamente */
+  }
+
+  .cuadrado-superior-autoajustable {
+    position: absolute; /* Mantenemos absoluto para que no afecte el flujo del flexbox */
+    background-color: #000080; /* Azul oscuro */
+    color: white; /* Texto blanco para contraste */
+    height: 1.5cm; /* Altura fija */
+    padding: 0 1em; /* Padding horizontal para ajuste de ancho */
+    white-space: nowrap; /* Evita que el texto se divida */
+    display: flex; /* Para centrar el texto */
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    line-height: 1;
+    font-weight: bold; /* Texto en negrita */
+    z-index: 10;
+
+    /* Posición: debajo del borde superior del rectángulo verde, pegado a la izquierda */
+    top: calc(var(--margin-top-rectangulo) + var(--borde-verde-ancho));
+    left: 0;
+  }
+
+  .rectangulo-contenedor {
+    position: relative; /* Mantener relativo para sus elementos internos */
+    width: 30cm;                  /* Ancho del rectángulo: 30 centímetros (aprox. 1134px) */
+    height: 12cm;                 /* Altura del rectángulo: 454px */
+    background-color: transparent; /* Fondo transparente */
+    border: var(--borde-verde-ancho) solid #008000; /* Color de borde verde fuerte */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: var(--margin-top-rectangulo); /* Margen superior de 2cm del body */
+    margin-bottom: 0;
+    display: flex; /* Usamos flexbox para alinear el SVG y el texto */
+    justify-content: space-between; /* Espacia el SVG a la izquierda y el texto a la derecha */
+    align-items: center; /* Centra verticalmente el contenido */
+    padding-right: 1em; /* Un pequeño padding para que el texto no esté pegado al borde */
+    overflow: visible; /* IMPORTANTE: Permitir que el contenido se desborde */
+  }
+
+  /* Estilos para el texto en el lado derecho */
+  .texto-derecha {
+    font-size: 0.8em; /* Ajusta el tamaño del texto para que quepa bien */
+    color: red; /* Texto en color rojo */
+    font-weight: bold; /* Texto en negrita */
+    max-width: 45%; /* Limita el ancho para que ocupe menos de la mitad y deje espacio al SVG */
+    text-align: justify; /* Justifica el texto para una mejor lectura */
+    line-height: 1.4; /* Espaciado entre líneas para mejorar la legibilidad */
+    margin-left: 2em; /* Margen para separar el texto del SVG */
+  }
+
+  /* Estilos para el SVG dentro del rectángulo */
+  .rectangulo-contenedor svg {
+    width: 50%; /* El SVG ocupa la mitad del ancho del contenedor */
+    height: 100%; /* El SVG ocupa el 100% de la altura disponible del contenedor */
+    overflow: visible; /* Asegurar que el SVG en sí permita desbordamiento */
+  }
+
+  /* Clases del SVG original */
+  .concept-box {
+    fill: aquamarine;
+    stroke: black;
+    stroke-width: 5.669px; /* Aproximadamente 1.5cm */
+    rx: 8px; /* Radio para bordes redondeados */
+    ry: 8px; /* Radio para bordes redondeados */
+  }
+
+  .concept-text {
+    font-size: 16px;
+    font-family: sans-serif;
+    fill: black;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-weight: bold;
+  }
+
+  .group-box {
+    transform-origin: center;
+  }
+
+  .connection-line {
+    fill: none;
+    stroke: black;
+    stroke-width: 2;
+  }
+
+  /* --- Línea divisoria vertical --- */
+  .linea-divisoria {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Se mantiene en el centro del rectángulo contenedor */
+    height: 100%;
+    width: 2px;
+    background-color: #333;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  /* --- Extensiones del rectángulo verde principal --- */
+  /* Se mantienen las extensiones existentes */
+  .rectangulo-contenedor::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--borde-verde-ancho));
+    top: calc(-1 * var(--borde-verde-ancho));
+    width: var(--borde-verde-ancho);
+    height: calc(var(--margin-top-rectangulo) + var(--borde-verde-ancho));
+    background-color: #008000;
+    transform: translateY(-100%);
+    transform-origin: bottom;
+    z-index: 1;
+  }
+
+  .rectangulo-contenedor::after {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--borde-verde-ancho));
+    top: calc(-1 * var(--borde-verde-ancho));
+    width: calc(1280px / 2 - 30cm / 2 - var(--borde-verde-ancho));
+    height: var(--borde-verde-ancho);
+    background-color: #008000;
+    transform: translateX(-100%);
+    transform-origin: right;
+    z-index: 1;
+  }
+
+  .extensiones-derecha-superior {
+    position: absolute;
+    top: calc(-1 * var(--borde-verde-ancho));
+    right: calc(-1 * var(--borde-verde-ancho));
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .extensiones-derecha-superior::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--borde-verde-ancho);
+    height: calc(var(--margin-top-rectangulo) + var(--borde-verde-ancho));
+    background-color: #008000;
+    transform: translateY(-100%);
+    transform-origin: bottom;
+    pointer-events: auto;
+  }
+
+  .extensiones-derecha-superior::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: calc(1280px / 2 - 30cm / 2 - var(--borde-verde-ancho));
+    height: var(--borde-verde-ancho);
+    background-color: #008000;
+    transform: translateX(100%);
+    transform-origin: left;
+    pointer-events: auto;
+  }
+
+  .extensiones-izquierda-inferior {
+    position: absolute;
+    bottom: calc(-1 * var(--borde-verde-ancho));
+    left: calc(-1 * var(--borde-verde-ancho));
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .extensiones-izquierda-inferior::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: var(--borde-verde-ancho);
+    height: calc(720px - var(--margin-top-rectangulo) - 12cm - (2 * var(--borde-verde-ancho)));
+    background-color: #008000;
+    transform: translateY(100%);
+    transform-origin: top;
+    pointer-events: auto;
+  }
+
+  .extensiones-izquierda-inferior::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: calc(1280px / 2 - 30cm / 2 - var(--borde-verde-ancho));
+    height: var(--borde-verde-ancho);
+    background-color: #008000;
+    transform: translateX(-100%);
+    transform-origin: right;
+    pointer-events: auto;
+  }
+
+  /* --- Estilos para el Cuadrado Inferior --- */
+  .cuadrado-inferior {
+    position: absolute;
+    bottom: 0; /* Se sitúa en la parte inferior del body */
+    left: 0; /* Comienza desde el margen izquierdo */
+    width: 100%; /* Se extiende hasta el margen derecho */
+    height: 2cm; /* Altura del cuadrado (puedes ajustarla) */
+    background-color: red; /* Color del cuadrado (azul oscuro) */
+    z-index: 5; /* Asegura que esté debajo del footer si se volviera a agregar */
+  }
+</style>
+</head>
+<body>
+
+<div class="cuadrado-superior-autoajustable">
+  ASPECTOS EPISTEMOLOGICOS
+</div>
+
+<div class="rectangulo-contenedor">
+  <div class="linea-divisoria"></div>
+
+  <svg width="100%" height="100%" viewBox="-80 0 689.13 302.36">
+    <polygon
+      points="
+        344.56, 0   609.13, 151.18   344.56, 302.36   80, 151.18    "
+      stroke="black"
+      stroke-width="2"
+      fill="transparent"
+    />
+
+    <g class="group-box" transform="translate(344.56, 0)">
+      <rect x="-60" y="-15" width="120" height="30" class="concept-box" />
+      <text x="0" y="0" class="concept-text">SOCIEDAD</text>
+    </g>
+
+    <g class="group-box" transform="translate(609.13, 151.18)">
+      <rect x="0" y="-15" width="120" height="30" class="concept-box" />
+      <text x="60" y="0" class="concept-text">TECNICA</text>
+    </g>
+
+    <g class="group-box" transform="translate(344.56, 302.36)">
+      <rect x="-70" y="-15" width="140" height="30" class="concept-box" />
+      <text x="0" y="0" class="concept-text">NATURALEZA</text>
+    </g>
+
+    <g class="group-box" transform="translate(80, 151.18)">
+      <rect x="-120" y="-15" width="120" height="30" class="concept-box" />
+      <text x="-60" y="0" class="concept-text">CIENCIA</text>
+    </g>
+
+    <g class="group-box" transform="translate(344.56, 151.18)">
+      <rect x="-50" y="-15" width="100" height="30" class="concept-box" />
+      <text x="0" y="0" class="concept-text">VALORES</text>
+    </g>
+
+    <path class="connection-line" d="M 344.56,0 L 344.56,136.18" />
+    <path class="connection-line" d="M 609.13,151.18 L 394.56,151.18" />
+    <path class="connection-line" d="M 344.56,302.36 L 344.56,166.18" />
+    <path class="connection-line" d="M 80,151.18 L 294.56,151.18" />
+  </svg>
+
+  <div class="texto-derecha">
+    El t&eacute;rmino "tecnolog&iacute;a" alude al abordaje global o sist&eacute;mico de un problema t&eacute;cnico (por ejemplo; tecnolog&iacute;a agropecuaria, tecnolog&iacute;a de gesti&oacute;n, biotecnolog&iacute;a, tecnolog&iacute;a textil, tecnolog&iacute;a del acero, etc.) (G. Fourez, 1997)... De igual manera, las revoluciones t&eacute;cnicas dan lugar a cambios radicales en una sociedad cuyos paradigmas han cambiado, por ejemplo la Revoluci&oacute;n Industrial que se hizo un cambio en virtud de cambios profundos en el pensamiento cient&iacute;fico del hombre moderno, en su concepci&oacute;n del mundo y en su ubicaci&oacute;n con respecto a la naturaleza: "lo que transforma no son, empero, los utensilios sino el hombre (Spengler, 1947).
+    <br><br>
+    Hasta cierto punto, los valores asociados al cambio tecnol&oacute;gico no son de ning&uacute;n modo universales, en el fondo del desarrollo de las t&eacute;cnicas.
+    <br><br>
+    Actualmente, surgen nuevos modos de producci&oacute;n de energ&iacute;a y se transforman las instituciones mismas, aqu&iacute; las cosas (seg&uacute;n nuevos ideales est&eacute;ticos y &eacute;ticos)... [Aparecen nuevas formas de ver, de hacer y de ordenar].
+    <br><br>
+    No obstante cambian las nociones del tiempo y del espacio en el momento en que las relaciones de la t&eacute;cnica con la ciencia, la naturaleza y la sociedad configuran un sistema intencional de acciones, aqu&iacute; en el &aacute;mbito de nuestra cultura.
+    <br><br>
+    Con el prop&oacute;sito de esto, nos lleva a pensar si ahora mismo no estamos inmersos en otra revoluci&oacute;n tecnol&oacute;gica, arraigados por la electr&oacute;nica, la informatizaci&oacute;n y la biotecnolog&iacute:a.
+  </div>
+
+  <div class="extensiones-derecha-superior"></div>
+  <div class="extensiones-izquierda-inferior"></div>
+</div>
+
+<div class="cuadrado-inferior"></div>
+
+</body>
+</html>
